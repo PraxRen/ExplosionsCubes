@@ -151,8 +151,8 @@ MonoBehaviour:
   _explosionRadius: 5
   _explosionForce: 600
   _meshRenderer: {fileID: 8132067440447640102}
-  _collider: {fileID: 7161318898914274926}
   _rigidbody: {fileID: 8736105049330692974}
+  _indexEnclosure: 1
 --- !u!114 &5999442618664442378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,8 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d82840c9afe1a488a912c22fbb40a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabCube: {fileID: 3061677592644056902}
-  _radiusSpawn: 1
+  _prefab: {fileID: 3061677592644056902}
+  _radius: 1
   _colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}

@@ -20,16 +20,13 @@ public class Cube : MonoBehaviour
 
     private void OnMouseUpAsButton() => StartCoroutine(HandleClick());
 
-    public void SetEnclosure(int index)
+    public void Init(int indexEnclosure, Vector3 scale, Color color)
     {
-        if (index < 0)
-            throw new ArgumentOutOfRangeException(nameof(index));
+        if (indexEnclosure < 0)
+            throw new ArgumentOutOfRangeException(nameof(indexEnclosure));
 
-        _indexEnclosure = index;
-    }
-
-    public void SetColor(Color color)
-    {
+        _indexEnclosure = indexEnclosure;
+        transform.localScale = scale;
         _meshRenderer.material.color = color;
     }
 
@@ -38,7 +35,7 @@ public class Cube : MonoBehaviour
         if (CanSplit())
         {
             yield return StartCoroutine(_spawnerCube.Create(_indexEnclosure + 1));
-            Explode(_spawnerCube.LastCreatedCubes);
+            Explode(_spawnerCube.LastCreated);
         }
 
         Destroy(gameObject);
