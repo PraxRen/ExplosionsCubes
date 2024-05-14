@@ -148,11 +148,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnerCube: {fileID: 5999442618664442378}
-  _explosionRadius: 5
+  _explosionRadius: 4
   _explosionForce: 600
+  _layerMaskExplodebleObject:
+    serializedVersion: 2
+    m_Bits: 8
   _meshRenderer: {fileID: 8132067440447640102}
-  _rigidbody: {fileID: 8736105049330692974}
-  _indexEnclosure: 1
 --- !u!114 &5999442618664442378
 MonoBehaviour:
   m_ObjectHideFlags: 0

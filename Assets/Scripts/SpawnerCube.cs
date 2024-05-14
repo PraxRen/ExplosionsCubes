@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnerCube : MonoBehaviour
@@ -12,13 +11,8 @@ public class SpawnerCube : MonoBehaviour
     [SerializeField] private float _radius;
     [SerializeField] private Color[] _colors;
 
-    private List<Cube> _lastCreated = new List<Cube>();
-
-    public IEnumerable<Cube> LastCreated => _lastCreated;
-
     public IEnumerator Create(int indexEnclosure)
     {
-        _lastCreated.Clear();
         int countCubes = UnityEngine.Random.Range(MinCount, MaxCount);
 
         for (int i = 0; i < countCubes; i++)
@@ -29,7 +23,6 @@ public class SpawnerCube : MonoBehaviour
             Vector3 scale = cube.transform.localScale / ScaleMultiplier;
             int indexColor = UnityEngine.Random.Range(0, _colors.Length);
             cube.Init(indexEnclosure, scale, _colors[indexColor]);
-            _lastCreated.Add(cube);
             yield return null;
         }
     }

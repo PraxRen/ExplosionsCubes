@@ -1,24 +1,29 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
     private const float MaxChanceDivision = 100;
+    private const float UpForceOffset = 0.7f;
+    private const float CoefficientEnclosureRadius = 1.1f;
+    private const float CoefficientEnclosureForce = 1.5f;
 
     [SerializeField] private SpawnerCube _spawnerCube;
     [SerializeField] private float _explosionRadius;
     [SerializeField] private float _explosionForce;
+    [SerializeField] private LayerMask _layerMaskExplodebleObject;
     [SerializeField] private MeshRenderer _meshRenderer;
-    [SerializeField] private Rigidbody _rigidbody;
 
-    [SerializeField] private int _indexEnclosure = 1;
-    private float _upForceOffset = 0.7f;
-
-    public Rigidbody Rigidbody => _rigidbody;
+    private int _indexEnclosure = 1;
 
     private void OnMouseUpAsButton() => StartCoroutine(HandleClick());
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius);
+    }
 
     public void Init(int indexEnclosure, Vector3 scale, Color color)
     {
@@ -28,6 +33,8 @@ public class Cube : MonoBehaviour
         _indexEnclosure = indexEnclosure;
         transform.localScale = scale;
         _meshRenderer.material.color = color;
+        _explosionRadius *= CoefficientEnclosureRadius;
+        _explosionForce *= CoefficientEnclosureForce; 
     }
 
     private IEnumerator HandleClick()
@@ -35,7 +42,10 @@ public class Cube : MonoBehaviour
         if (CanSplit())
         {
             yield return StartCoroutine(_spawnerCube.Create(_indexEnclosure + 1));
-            Explode(_spawnerCube.LastCreated);
+        }
+        else
+        {
+            Explode();
         }
 
         Destroy(gameObject);
@@ -47,11 +57,18 @@ public class Cube : MonoBehaviour
         return UnityEngine.Random.Range(0, MaxChanceDivision) <= currentChance;
     }
 
-    private void Explode(IEnumerable<Cube> cubes)
+    private void Explode()
     {
-        foreach (Cube cube in cubes)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius, _layerMaskExplodebleObject, QueryTriggerInteraction.Ignore);
+
+        foreach (Collider collider in colliders)
         {
-            cube.Rigidbody.AddExplosionForce(_explosionForce, transform.position, _explosionRadius, _upForceOffset);
+            Rigidbody rigidbody = collider.attachedRigidbody;
+
+            if (rigidbody == null)
+                continue;
+
+            rigidbody.AddExplosionForce(_explosionForce, transform.position, _explosionRadius, UpForceOffset);
         }
     }
 }
