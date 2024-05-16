@@ -19,12 +19,6 @@ public class Cube : MonoBehaviour
 
     private void OnMouseUpAsButton() => StartCoroutine(HandleClick());
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _explosionRadius);
-    }
-
     public void Init(int indexEnclosure, Vector3 scale, Color color)
     {
         if (indexEnclosure < 0)
@@ -43,11 +37,8 @@ public class Cube : MonoBehaviour
         {
             yield return StartCoroutine(_spawnerCube.Create(_indexEnclosure + 1));
         }
-        else
-        {
-            Explode();
-        }
 
+        Explode();
         Destroy(gameObject);
     }
 
@@ -63,9 +54,7 @@ public class Cube : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            Rigidbody rigidbody = collider.attachedRigidbody;
-
-            if (rigidbody == null)
+            if (collider.TryGetComponent(out Rigidbody rigidbody) == false)
                 continue;
 
             rigidbody.AddExplosionForce(_explosionForce, transform.position, _explosionRadius, UpForceOffset);

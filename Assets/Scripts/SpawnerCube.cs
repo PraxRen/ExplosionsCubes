@@ -13,7 +13,7 @@ public class SpawnerCube : MonoBehaviour
 
     public IEnumerator Create(int indexEnclosure)
     {
-        int countCubes = UnityEngine.Random.Range(MinCount, MaxCount);
+        int countCubes = Random.Range(MinCount, MaxCount);
 
         for (int i = 0; i < countCubes; i++)
         {
@@ -21,7 +21,7 @@ public class SpawnerCube : MonoBehaviour
             position.y = transform.position.y;
             Cube cube = Instantiate(_prefab, position, Quaternion.identity);
             Vector3 scale = cube.transform.localScale / ScaleMultiplier;
-            int indexColor = UnityEngine.Random.Range(0, _colors.Length);
+            int indexColor = Random.Range(0, _colors.Length);
             cube.Init(indexEnclosure, scale, _colors[indexColor]);
             yield return null;
         }
